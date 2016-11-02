@@ -11,7 +11,7 @@
 void error(const char* msg);
 
 int main(short argc, char* argv[]) {
-  int sockfd, j;
+  int sockfd, i;
   struct sockaddr_ll servaddr;
   char check[] = "123";
   char data[256 - sizeof(check)];
@@ -33,8 +33,8 @@ int main(short argc, char* argv[]) {
   servaddr.sll_pkttype = PACKET_OTHERHOST;
   servaddr.sll_halen = ETH_ALEN;
   
-  for(j = 0; j < 6; j++)
-    servaddr.sll_addr[j] = dest_mac[j];
+  for(i = 0; i < 6; i++)
+    servaddr.sll_addr[i] = dest_mac[i];
 
   servaddr.sll_addr[6] = 0x00;
   servaddr.sll_addr[7] = 0x00;
@@ -47,8 +47,8 @@ int main(short argc, char* argv[]) {
   strcat(packet, data);
 
   /* sending */
-  for(j = 0; j < 30; j++) {
-    printf("%i) Sending...\n", j);
+  for(i = 0; i < 30; i++) {
+    printf("%i) Sending...\n", i);
 
     if(sendto(sockfd, packet, 256, 0, (struct sockaddr*)&servaddr, sizeof(servaddr)) < 0)
       error("Error on sending");
@@ -58,8 +58,8 @@ int main(short argc, char* argv[]) {
   /* receiving answer */
   socklen_t l = sizeof servaddr;
 
-  for(j = 0; j < 200; j++) {
-    printf("%i) Waiting for answer...\n", j);
+  for(i = 0; i < 200; i++) {
+    printf("%i) Waiting for answer...\n", i);
 
     if(recvfrom(sockfd, answer, 1000, 0, (struct sockaddr*)&servaddr, &l) < 0)
       error("Error on receiving");
